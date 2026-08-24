@@ -1,0 +1,32 @@
+# Configuration on repos involved in the CI
+
+# -------------------- Configuration Spec -------------------- #
+# Each header defines a repository, necessary repos sofar are  #
+# PETSC, HPDDM as well as the datafiles needed by the PETSC    #
+# test harness. The configuration of each repo has following   #
+# options:                                                     #
+# type: [remote,local]                                         #
+# url: required by remote type to fetch repo                   #
+# path: required by local type to symlik repo                  #
+# branch: checkout a specific branch, defaults to main         #
+# hash: checkout specific commit has in branch (HEAD default)  #
+# ------------------------------------------------------------ #
+
+title = "example"
+
+[PETSC]
+type = "remote"
+url = "https://gitlab.com/petsc/petsc.git"
+branch = "main" #if omitted defaults to main
+# branch = "release"
+# hash = "dcb28d8e36d8acfcd2d433a2c37cd7f20e0641c1"
+
+[HPDDM] 
+type = "remote"
+url = "https://github.com/hpddm/hpddm.git"
+branch = "main" # defaults to main
+
+[DATAFILES]
+type = "remote"
+url = "https://gitlab.com/petsc/datafiles"
+branch = "main" # defaults to main
