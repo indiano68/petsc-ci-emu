@@ -5,4 +5,5 @@ x="--with-x=0"
 
 [PACKAGES]
 slepc="--download-slepc"
-hpddm="--download-hpddm"
+hpddm="--download-hpddm=./repos-example/HPDDM"
+hpddm-commit="--download-hpddm-commit=HEAD"
