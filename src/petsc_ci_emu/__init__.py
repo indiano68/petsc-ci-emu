@@ -100,22 +100,44 @@ def checkout_subcommand(title, repos):
             os.chdir(cwd)
 
 
-def bpackages_subcommand(title):
+def resolve_config(config_file):
+    with open(config_file, "rb") as handle:
+        data = tomllib.load(handle)
+        arch = data.get("arch")
+    args = list()
+    for dep in data.get("depends_on", []):
+        _, other_args = resolve_config(config_file.parent / f"{dep}.toml")
+        args += other_args
+    for value in data.get("CONFIGURATIONS", {}).values():
+        args.append(value)
+    for value in data.get("PACKAGES", {}).values():
+        args.append(value)
+    for var, values in data.get("COMPILER_FLAGS", {}).items():
+        args.append(f"{var}=" + " ".join(values))
+    for var, values in data.get("COMPILER_FLAGS_APPEND", {}).items():
+        args.append(f"{var}+=" + " ".join(values))
+    return arch, args
+
+
+def build_subcommand(title, config_file):
     petsc_destination = f"repos-{title}/PETSC"
-    packages_config = "petsc_configs/arch-packages.conf"
     if not Path(petsc_destination).exists():
         raise ValueError("No PETSC repo found")
-    if not Path().exists():
-        raise ValueError("No configuration for arch-packages found")
-    configure_args = list()
-    with open(packages_config, "r") as flag_list:
-        lines = flag_list.readlines()
-        configure_args = [line.strip() for line in lines]
+    config_file = Path(config_file)
+    arch, configure_args = resolve_config(config_file)
     cwd = Path.cwd()
     os.chdir(petsc_destination)
-    result = sbp.run(["./configure"] + configure_args)
-    result = sbp.run(["make", "PETSC_ARCH=arch-packages", "all"])
+    result = sbp.run(["./configure", f"PETSC_ARCH={arch}"] + configure_args)
+    result = sbp.run(["make", f"PETSC_ARCH={arch}", "all"])
     os.chdir(cwd)
+
+
+def configure_subcommand(title, config_file):
+    print("Configuring: ", config_file)
+
+
+def check_subcommand(title, config_file):
+    print("Checking: ", config_file)
 
 
 def main():
@@ -124,13 +146,16 @@ def main():
                         help="Configuration file to use", default="emu-config.toml")
     subparsers = parser.add_subparsers(dest="group", required=True)
 
-    fetch_parser = subparsers.add_parser("fetch", help="manage the CI repositories")
+    fetch_parser = subparsers.add_parser(
+        "fetch", help="manage the CI repositories")
     fetch_parser.add_argument("subcommand", choices=["get", "clean", "checkout"],
                               help="series of commands that one can run")
 
-    build_parser = subparsers.add_parser("build", help="build PETSc arches")
-    build_parser.add_argument("subcommand", choices=["bpackages", "cpackages"],
-                              help="series of commands that one can run")
+    arch_parser = subparsers.add_parser("arch", help="build PETSc arches")
+    arch_parser.add_argument("subcommand", choices=["build", "configure", "check"],
+                             help="series of commands that one can run")
+    arch_parser.add_argument(
+        "config", help="path to the arch's TOML config file")
 
     args = parser.parse_args()
 
@@ -149,6 +174,10 @@ def main():
             clean_subcommand(title, repos)
         if subcommand == "checkout":
             checkout_subcommand(title, repos)
-    if args.group == "build":
-        if subcommand == "bpackages":
-            bpackages_subcommand(title)
+    if args.group == "arch":
+        if subcommand == "build":
+            build_subcommand(title, args.config)
+        if subcommand == "configure":
+            configure_subcommand(title, args.config)
+        if subcommand == "check":
+            check_subcommand(title, args.config)
