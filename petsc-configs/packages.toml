@@ -1,0 +1,27 @@
+arch="arch-packages"
+depends_on=[]
+
+[CONFIGURATIONS]
+fortran-bindings="--with-fortran-bindings=0"
+c2html="--with-c2html=0"
+hipc="--with-hipc=0"
+cudac="--with-cudac=0"
+x="--with-x=0"
+python="--with-python=0"
+bison="--with-bison=0"
+cmake="--with-cmake=0"
+debugging="--with-debugging=0"
+
+[PACKAGES]
+mpich="--download-mpich"
+f2cblaslapack="--download-f2cblaslapack"
+scalapack="--download-scalapack"
+metis="--download-metis"
+parmetis="--download-parmetis"
+mumps="--download-mumps"
+cmake="--download-cmake"
+
+[COMPILER_FLAGS]
+COPTFLAGS=["-g0", "-O3"]
+FOPTFLAGS=["-g0", "-O3"]
+
