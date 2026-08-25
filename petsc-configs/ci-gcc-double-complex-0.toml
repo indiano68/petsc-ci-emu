@@ -1,0 +1,14 @@
+arch="ci-gcc-double-complex-0"
+depends_on=[
+  "common/base",
+  "common/mpi-toolchain",
+  "common/warnings-gcc",
+  "common/mumps-scalapack",
+  "common/hwloc",
+  "common/metis-parmetis",
+]
+
+[CONFIGURATIONS]
+64-bit-indices="--with-64-bit-indices=0"
+scalar-type="--with-scalar-type=complex"
+precision="--with-precision=double"

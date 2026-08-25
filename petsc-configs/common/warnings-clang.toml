@@ -1,0 +1,2 @@
+[COMPILER_FLAGS]
+CXXPPFLAGS=["-Wextra", "-Wextra-semi", "-Wpedantic", "-Wno-sign-compare", "-DMPICH_SKIP_MPICXX", "-Wextra-semi-stmt", "-Wdouble-promotion", "-DPETSC_SKIP_ATTRIBUTE_MAY_ALIAS", "-Werror"]

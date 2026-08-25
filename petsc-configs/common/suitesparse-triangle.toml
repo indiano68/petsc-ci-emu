@@ -1,0 +1,4 @@
+[PACKAGES]
+triangle="--download-triangle"
+suitesparse="--download-suitesparse"
+suitesparse-cmake-arguments="--download-suitesparse-cmake-arguments=-DCMAKE_CXX_FLAGS_DEBUG:STRING=-Wno-error"

@@ -1,0 +1,4 @@
+[PACKAGES]
+scalapack-lib="--with-scalapack-lib=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib/libscalapack.dylib"
+mumps-include="--with-mumps-include=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/include/"
+mumps-lib="--with-mumps-lib=[/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib/libcmumps.a,libdmumps.a,libzmumps.a,libsmumps.a,libmumps_common.a,libpord.a,/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib/libmetis.dylib,/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib/libparmetis.dylib]"

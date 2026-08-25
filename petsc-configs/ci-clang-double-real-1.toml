@@ -1,0 +1,12 @@
+arch="ci-clang-double-real-1"
+depends_on=[
+  "common/base",
+  "common/mpi-toolchain",
+  "common/warnings-clang",
+  "common/mumps-scalapack",
+]
+
+[CONFIGURATIONS]
+64-bit-indices="--with-64-bit-indices=1"
+scalar-type="--with-scalar-type=real"
+precision="--with-precision=double"

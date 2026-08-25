@@ -1,0 +1,9 @@
+arch="ci-nvcc-complex"
+depends_on=[
+  "common/base",
+  "common/nvcc",
+]
+
+[CONFIGURATIONS]
+scalar-type="--with-scalar-type=complex"
+precision="--with-precision=single"

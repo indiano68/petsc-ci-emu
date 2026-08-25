@@ -1,0 +1,3 @@
+[PACKAGES]
+hwloc-include="--with-hwloc-include=/opt/homebrew/Cellar/hwloc/2.13.0/include/"
+hwloc-lib="--with-hwloc-lib=/opt/homebrew/Cellar/hwloc/2.13.0/lib/libhwloc.dylib"

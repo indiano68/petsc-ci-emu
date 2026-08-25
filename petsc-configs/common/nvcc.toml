@@ -1,0 +1,22 @@
+# NOTE: targets the remote Linux CUDA runner, not this machine.
+# The ${LOGIN} paths, MKL and CUDA are NOT resolvable on macOS/arm64
+# and are intentionally left unresolved.
+
+[CONFIGURATIONS]
+strict-petscerrorcode="--with-strict-petscerrorcode"
+fc="--with-fc=0"
+cuda="--with-cuda"
+
+[PACKAGES]
+mpi-dir="--with-mpi-dir=/local/${LOGIN}/petsc/arch-linux-c-opt"
+hwloc-dir="--with-hwloc-dir=/local/${LOGIN}/petsc/arch-linux-c-opt"
+blaslapack-lib="--with-blaslapack-lib=[/local/${LOGIN}/lib/libmkl_core.so,/local/${LOGIN}/lib/libmkl_intel_lp64.so,/local/${LOGIN}/lib/libmkl_sequential.so]"
+blaslapack-include="--with-blaslapack-include=/local/${LOGIN}/include"
+mkl_pardiso="--with-mkl_pardiso"
+thrust="--download-thrust"
+
+[COMPILER_FLAGS]
+CXXPPFLAGS=["-Wextra", "-Wextra-semi", "-Wno-sign-compare", "-DOMPI_SKIP_MPICXX"]
+
+[COMPILER_FLAGS_APPEND]
+CUDAFLAGS=["--compiler-options", "-Wall,-Wextra,-Werror,-Wno-psabi,-Wno-deprecated-declarations", "-I/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/hpddm-dev/include"]

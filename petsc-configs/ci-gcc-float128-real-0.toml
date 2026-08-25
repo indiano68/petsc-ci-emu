@@ -1,0 +1,15 @@
+arch="ci-gcc-float128-real-0"
+depends_on=[
+  "common/base",
+  "common/mpi-toolchain",
+  "common/f2cblaslapack",
+]
+
+[CONFIGURATIONS]
+64-bit-indices="--with-64-bit-indices=0"
+scalar-type="--with-scalar-type=real"
+precision="--with-precision=__float128"
+cxx-dialect="--with-cxx-dialect=11"
+
+[COMPILER_FLAGS]
+CXXPPFLAGS=["-Wextra", "-Wextra-semi", "-Wpedantic", "-Wno-sign-compare", "-DMPICH_SKIP_MPICXX"]

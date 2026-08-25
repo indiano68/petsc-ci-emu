@@ -1,0 +1,13 @@
+arch="ci-gcc-single-complex-1"
+depends_on=[
+  "common/base",
+  "common/mpi-toolchain",
+  "common/warnings-gcc",
+  "common/mumps-scalapack",
+  "common/hwloc",
+]
+
+[CONFIGURATIONS]
+64-bit-indices="--with-64-bit-indices=1"
+scalar-type="--with-scalar-type=complex"
+precision="--with-precision=single"
