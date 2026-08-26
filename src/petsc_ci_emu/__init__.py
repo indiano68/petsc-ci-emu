@@ -127,21 +127,25 @@ def resolve_config(config_file, substitutions, seen=None):
     return arch, args
 
 
-def build_subcommand(title, repos, config_file, destination, substitutions):
+def petsc_arch_run(title, config_file, substitutions, command_builder):
     petsc_destination = f"repos-{title}/PETSC"
     if not Path(petsc_destination).exists():
         raise ValueError("No PETSC repo found")
-    config_file = Path(config_file)
-    arch, configure_args = resolve_config(config_file, substitutions)
+    arch, configure_args = resolve_config(Path(config_file), substitutions)
     cwd = Path.cwd()
     os.chdir(petsc_destination)
-    result = sbp.run(["./configure", f"PETSC_ARCH={arch}"] + configure_args, check=True)
-    result = sbp.run(["make", f"PETSC_ARCH={arch}", "all"], check=True)
+    sbp.run(command_builder(arch, configure_args), check=True)
     os.chdir(cwd)
 
 
+def build_subcommand(title, repos, config_file, destination, substitutions):
+    petsc_arch_run(title, config_file, substitutions,
+                    lambda arch, args: ["make", f"PETSC_ARCH={arch}", "all"])
+
+
 def configure_subcommand(title, repos, config_file, destination, substitutions):
-    print("Configuring: ", config_file)
+    petsc_arch_run(title, config_file, substitutions,
+                    lambda arch, args: ["./configure", f"PETSC_ARCH={arch}"] + args)
 
 
 def check_subcommand(title, repos, config_file, destination, substitutions):
