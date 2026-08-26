@@ -2,6 +2,7 @@ arch="ci-nvcc-complex"
 depends_on=[
   "common/base",
   "common/nvcc",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]

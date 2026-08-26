@@ -8,6 +8,7 @@ depends_on=[
   "common/metis-parmetis",
   "common/suitesparse-triangle",
   "common/f2cblaslapack",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]

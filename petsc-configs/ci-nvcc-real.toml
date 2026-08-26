@@ -2,4 +2,5 @@ arch="ci-nvcc-real"
 depends_on=[
   "common/base",
   "common/nvcc",
+  "common/test-hpddm",
 ]

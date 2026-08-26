@@ -4,6 +4,7 @@ depends_on=[
   "common/mpi-toolchain",
   "common/warnings-clang",
   "common/mumps-scalapack",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]

@@ -1,0 +1,3 @@
+[TESTS]
+partial="echo PARTIAL TEST"
+full="echo FULL TEST"

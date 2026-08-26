@@ -5,6 +5,7 @@ depends_on=[
   "common/warnings-clang",
   "common/mumps-scalapack",
   "common/metis-parmetis",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]

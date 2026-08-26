@@ -5,6 +5,7 @@ depends_on=[
   "common/warnings-gcc",
   "common/mumps-scalapack",
   "common/hwloc",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]

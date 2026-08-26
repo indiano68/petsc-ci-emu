@@ -3,6 +3,7 @@ depends_on=[
   "common/base",
   "common/mpi-toolchain",
   "common/f2cblaslapack",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]

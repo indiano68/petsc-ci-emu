@@ -6,6 +6,7 @@ depends_on=[
   "common/mumps-scalapack",
   "common/hwloc",
   "common/metis-parmetis",
+  "common/test-hpddm",
 ]
 
 [CONFIGURATIONS]
