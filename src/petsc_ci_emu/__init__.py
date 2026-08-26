@@ -31,7 +31,7 @@ class repository:
         if "branch" in repo_config.keys():
             self.branch = repo_config["branch"]
         if "hash" in repo_config.keys():
-            self.hash = repo_config["branch"]
+            self.hash = repo_config["hash"]
 
     def __str__(self):
         string = f"{self.name} \n"
@@ -57,10 +57,13 @@ def parse_config(config_file: str):
     return title, repos
 
 
-destination = None
+def substitute(value, substitutions):
+    for key, replacement in substitutions.items():
+        value = value.replace("{" + key + "}", replacement)
+    return value
 
 
-def get_subcommand(title, repos):
+def get_subcommand(title, repos, config_file, destination, substitutions):
     print("Getting:")
     for repo in repos:
         local_destination = f"{destination}/{repo.name}"
@@ -74,14 +77,12 @@ def get_subcommand(title, repos):
             shutil.copytree(Path(repo.localizer), Path(local_destination))
 
 
-def clean_subcommand(title, repos):
-    destination = f"repos-{title}"
+def clean_subcommand(title, repos, config_file, destination, substitutions):
     print("Deleting:", destination)
     shutil.rmtree(Path(destination))
 
 
-def checkout_subcommand(title, repos):
-    destination = f"repos-{title}"
+def checkout_subcommand(title, repos, config_file, destination, substitutions):
     for repo in repos:
         local_destination = f"{destination}/{repo.name}"
         if repo.branch != None or repo.hash != None:
@@ -92,51 +93,58 @@ def checkout_subcommand(title, repos):
                 if repo.branch != None:
                     print(f"branch {repo.branch} ", end="")
                 if repo.hash != None:
-                    print(f"hash {repo.branch} ", end="")
+                    print(f"hash {repo.hash} ", end="")
                 print()
             cwd = Path.cwd()
             os.chdir(local_destination)
-            sbp.run(["git", "checkout", f"{repo.branch}"], check=True)
+            checkout_target = repo.branch if repo.branch != None else repo.hash
+            sbp.run(["git", "checkout", f"{checkout_target}"], check=True)
             os.chdir(cwd)
 
 
-def resolve_config(config_file):
+def resolve_config(config_file, substitutions, seen=None):
+    if seen is None:
+        seen = set()
+    config_file = Path(config_file)
+    if config_file in seen:
+        return None, []
+    seen.add(config_file)
     with open(config_file, "rb") as handle:
         data = tomllib.load(handle)
         arch = data.get("arch")
     args = list()
     for dep in data.get("depends_on", []):
-        _, other_args = resolve_config(config_file.parent / f"{dep}.toml")
+        _, other_args = resolve_config(config_file.parent / f"{dep}.toml", substitutions, seen)
         args += other_args
     for value in data.get("CONFIGURATIONS", {}).values():
-        args.append(value)
+        args.append(substitute(value, substitutions))
     for value in data.get("PACKAGES", {}).values():
-        args.append(value)
+        args.append(substitute(value, substitutions))
     for var, values in data.get("COMPILER_FLAGS", {}).items():
-        args.append(f"{var}=" + " ".join(values))
+        args.append(f"{var}=" + " ".join(substitute(v, substitutions) for v in values))
     for var, values in data.get("COMPILER_FLAGS_APPEND", {}).items():
-        args.append(f"{var}+=" + " ".join(values))
+        args.append(f"{var}+=" + " ".join(substitute(v, substitutions) for v in values))
     return arch, args
 
 
-def build_subcommand(title, config_file):
+def build_subcommand(title, repos, config_file, destination, substitutions):
     petsc_destination = f"repos-{title}/PETSC"
     if not Path(petsc_destination).exists():
         raise ValueError("No PETSC repo found")
     config_file = Path(config_file)
-    arch, configure_args = resolve_config(config_file)
+    arch, configure_args = resolve_config(config_file, substitutions)
     cwd = Path.cwd()
     os.chdir(petsc_destination)
-    result = sbp.run(["./configure", f"PETSC_ARCH={arch}"] + configure_args)
-    result = sbp.run(["make", f"PETSC_ARCH={arch}", "all"])
+    result = sbp.run(["./configure", f"PETSC_ARCH={arch}"] + configure_args, check=True)
+    result = sbp.run(["make", f"PETSC_ARCH={arch}", "all"], check=True)
     os.chdir(cwd)
 
 
-def configure_subcommand(title, config_file):
+def configure_subcommand(title, repos, config_file, destination, substitutions):
     print("Configuring: ", config_file)
 
 
-def check_subcommand(title, config_file):
+def check_subcommand(title, repos, config_file, destination, substitutions):
     print("Checking: ", config_file)
 
 
@@ -161,23 +169,24 @@ def main():
 
     print("Acting with config file: ", args.config_file)
 
-    global destination
     title, repos = parse_config(args.config_file)
     subcommand = args.subcommand
-    destination = f"repos-{title}"
+    config_file = getattr(args, "config", None)
+    destination = str(Path.cwd() / f"repos-{title}")
+    substitutions = {"REPOSITORIES_LOCATION": destination, "TITLE": title}
     os.makedirs(f"{destination}/", exist_ok=True)
 
     if args.group == "fetch":
         if subcommand == "get":
-            get_subcommand(title, repos)
+            get_subcommand(title, repos, config_file, destination, substitutions)
         if subcommand == "clean":
-            clean_subcommand(title, repos)
+            clean_subcommand(title, repos, config_file, destination, substitutions)
         if subcommand == "checkout":
-            checkout_subcommand(title, repos)
+            checkout_subcommand(title, repos, config_file, destination, substitutions)
     if args.group == "arch":
         if subcommand == "build":
-            build_subcommand(title, args.config)
+            build_subcommand(title, repos, config_file, destination, substitutions)
         if subcommand == "configure":
-            configure_subcommand(title, args.config)
+            configure_subcommand(title, repos, config_file, destination, substitutions)
         if subcommand == "check":
-            check_subcommand(title, args.config)
+            check_subcommand(title, repos, config_file, destination, substitutions)

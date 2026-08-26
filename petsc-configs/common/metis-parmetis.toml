@@ -1,6 +1,6 @@
 [PACKAGES]
-metis-include="--with-metis-include=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/include/"
-metis-lib="--with-metis-lib=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib/libmetis.dylib"
-parmetis-include="--with-parmetis-include=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/include/"
-parmetis-lib="--with-parmetis-lib=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib/libparmetis.dylib"
+metis-include="--with-metis-include={REPOSITORIES_LOCATION}/PETSC/arch-packages/include/"
+metis-lib="--with-metis-lib={REPOSITORIES_LOCATION}/PETSC/arch-packages/lib/libmetis.dylib"
+parmetis-include="--with-parmetis-include={REPOSITORIES_LOCATION}/PETSC/arch-packages/include/"
+parmetis-lib="--with-parmetis-lib={REPOSITORIES_LOCATION}/PETSC/arch-packages/lib/libparmetis.dylib"
 htool="--download-htool"

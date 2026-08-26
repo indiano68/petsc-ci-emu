@@ -1,8 +1,8 @@
 [CONFIGURATIONS]
-cc="--with-cc=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/bin/mpicc"
-cxx="--with-cxx=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/bin/mpicxx"
-fc="--with-fc=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/bin/mpif90"
-mpiexec="--with-mpiexec=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/bin/mpiexec"
+cc="--with-cc={REPOSITORIES_LOCATION}/PETSC/arch-packages/bin/mpicc"
+cxx="--with-cxx={REPOSITORIES_LOCATION}/PETSC/arch-packages/bin/mpicxx"
+fc="--with-fc={REPOSITORIES_LOCATION}/PETSC/arch-packages/bin/mpif90"
+mpiexec="--with-mpiexec={REPOSITORIES_LOCATION}/PETSC/arch-packages/bin/mpiexec"
 fortran-bindings="--with-fortran-bindings=0"
 cudac="--with-cudac=0"
 python="--with-python=0"

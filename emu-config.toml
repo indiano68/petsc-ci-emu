@@ -10,6 +10,11 @@
 # path: required by local type to symlik repo                  #
 # branch: checkout a specific branch, defaults to main         #
 # hash: checkout specific commit has in branch (HEAD default)  #
+#                                                                #
+# Arch configs (petsc-configs/) may reference this config's     #
+# values via placeholders, substituted at build time:           #
+# {REPOSITORIES_LOCATION}: absolute path of repos-<title>       #
+# {TITLE}: this config's title                                  #
 # ------------------------------------------------------------ #
 
 title = "example"

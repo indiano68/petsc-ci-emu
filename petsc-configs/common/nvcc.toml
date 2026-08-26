@@ -19,4 +19,4 @@ thrust="--download-thrust"
 CXXPPFLAGS=["-Wextra", "-Wextra-semi", "-Wno-sign-compare", "-DOMPI_SKIP_MPICXX"]
 
 [COMPILER_FLAGS_APPEND]
-CUDAFLAGS=["--compiler-options", "-Wall,-Wextra,-Werror,-Wno-psabi,-Wno-deprecated-declarations", "-I/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/hpddm-dev/include"]
+CUDAFLAGS=["--compiler-options", "-Wall,-Wextra,-Werror,-Wno-psabi,-Wno-deprecated-declarations", "-I{REPOSITORIES_LOCATION}/HPDDM/include"]

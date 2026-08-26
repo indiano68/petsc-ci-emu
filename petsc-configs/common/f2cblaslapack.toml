@@ -1,5 +1,5 @@
 [PACKAGES]
-f2cblaslapack-dir="--with-f2cblaslapack-dir=/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages"
+f2cblaslapack-dir="--with-f2cblaslapack-dir={REPOSITORIES_LOCATION}/PETSC/arch-packages"
 
 [COMPILER_FLAGS]
-LDFLAGS=["-L/Users/erikfabrizzi/Workspace/LIP6-SWE/repos/petsc/arch-packages/lib"]
+LDFLAGS=["-L{REPOSITORIES_LOCATION}/PETSC/arch-packages/lib"]
