@@ -1,3 +1,3 @@
 [TESTS]
-partial="echo PARTIAL TEST"
-full="echo FULL TEST"
+partial="make test query='requires' queryval='*hpddm*' s='ksp*ksp*ex76*' TIMEOUT=200"
+full="make test query='requires' queryval='*hpddm*' TIMEOUT=200"
