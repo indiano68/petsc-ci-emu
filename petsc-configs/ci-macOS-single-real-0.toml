@@ -1,0 +1,15 @@
+arch="ci-clang-single-real-0"
+depends_on=[
+  "common/base",
+  "common/mpi-toolchain",
+  "common/warnings-clang",
+  "common/mumps-scalapack",
+  "common/test-hpddm",
+  "common/f2cblaslapack",
+]
+
+[CONFIGURATIONS]
+64-bit-indices="--with-64-bit-indices=0"
+scalar-type="--with-scalar-type=real"
+precision="--with-precision=single"
+cxx-dialect="--with-cxx-dialect=11"
