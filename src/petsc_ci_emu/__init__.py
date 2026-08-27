@@ -115,7 +115,8 @@ def resolve_config(config_file, substitutions, seen=None):
     args = list()
     tests = dict()
     for dep in data.get("depends_on", []):
-        _, other_args, other_tests = resolve_config(config_file.parent / f"{dep}.toml", substitutions, seen)
+        _, other_args, other_tests = resolve_config(
+            config_file.parent / f"{dep}.toml", substitutions, seen)
         args += other_args
         tests.update(other_tests)
     for value in data.get("CONFIGURATIONS", {}).values():
@@ -123,9 +124,11 @@ def resolve_config(config_file, substitutions, seen=None):
     for value in data.get("PACKAGES", {}).values():
         args.append(substitute(value, substitutions))
     for var, values in data.get("COMPILER_FLAGS", {}).items():
-        args.append(f"{var}=" + " ".join(substitute(v, substitutions) for v in values))
+        args.append(f"{var}=" + " ".join(substitute(v, substitutions)
+                    for v in values))
     for var, values in data.get("COMPILER_FLAGS_APPEND", {}).items():
-        args.append(f"{var}+=" + " ".join(substitute(v, substitutions) for v in values))
+        args.append(f"{var}+=" + " ".join(substitute(v, substitutions)
+                    for v in values))
     for name, command in data.get("TESTS", {}).items():
         tests[name] = substitute(command, substitutions)
     return arch, args, tests
@@ -136,7 +139,8 @@ def petsc_arch_run(title, config_file, substitutions, action):
     if not Path(petsc_destination).exists():
         raise ValueError("No PETSC repo found")
     config_files = set()
-    arch, configure_args, tests = resolve_config(Path(config_file), substitutions, config_files)
+    arch, configure_args, tests = resolve_config(
+        Path(config_file), substitutions, config_files)
     cwd = Path.cwd()
     os.chdir(petsc_destination)
     action(arch, configure_args, config_files, tests)
@@ -211,14 +215,14 @@ def arch_test(arch, args, tests, test, emu_config_file, substitutions):
 
 def build_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test):
     petsc_arch_run(title, config_file, substitutions,
-                    lambda arch, args, config_files, tests: arch_build(
-                        arch, args, config_files, emu_config_file, substitutions))
+                   lambda arch, args, config_files, tests: arch_build(
+                       arch, args, config_files, emu_config_file, substitutions))
 
 
 def configure_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test):
     petsc_arch_run(title, config_file, substitutions,
-                    lambda arch, args, config_files, tests: arch_configure(
-                        arch, args, config_files, emu_config_file, config_file, substitutions))
+                   lambda arch, args, config_files, tests: arch_configure(
+                       arch, args, config_files, emu_config_file, config_file, substitutions))
 
 
 def check_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test):
@@ -227,8 +231,8 @@ def check_subcommand(title, repos, emu_config_file, config_file, destination, su
 
 def test_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test):
     petsc_arch_run(title, config_file, substitutions,
-                    lambda arch, args, config_files, tests: arch_test(
-                        arch, args, tests, test, emu_config_file, substitutions))
+                   lambda arch, args, config_files, tests: arch_test(
+                       arch, args, tests, test, emu_config_file, substitutions))
 
 
 def link_hpddm_headers(arch, destination):
@@ -243,8 +247,8 @@ def link_hpddm_headers(arch, destination):
 
 def link_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test):
     petsc_arch_run(title, config_file, substitutions,
-                    lambda arch, args, config_files, tests: arch_link(
-                        arch, args, config_files, emu_config_file, destination, substitutions))
+                   lambda arch, args, config_files, tests: arch_link(
+                       arch, args, config_files, emu_config_file, destination, substitutions))
 
 
 def main():
@@ -268,12 +272,13 @@ def main():
 
     args = parser.parse_args()
 
-    print("Acting with config file: ", args.config_file)
+    print("Acting with config file: ", args.config_file, flush=True)
 
     emu_config_file = Path(args.config_file).resolve()
     title, repos = parse_config(args.config_file)
     subcommand = args.subcommand
-    config_file = Path(args.config).resolve() if getattr(args, "config", None) else None
+    config_file = Path(args.config).resolve() if getattr(
+        args, "config", None) else None
     test = getattr(args, "test", None)
     if subcommand == "test" and test is None:
         parser.error("arch test requires a test name")
@@ -283,19 +288,27 @@ def main():
 
     if args.group == "repos":
         if subcommand == "get":
-            get_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            get_subcommand(title, repos, emu_config_file,
+                           config_file, destination, substitutions, test)
         if subcommand == "clean":
-            clean_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            clean_subcommand(title, repos, emu_config_file,
+                             config_file, destination, substitutions, test)
         if subcommand == "checkout":
-            checkout_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            checkout_subcommand(title, repos, emu_config_file,
+                                config_file, destination, substitutions, test)
     if args.group == "arch":
         if subcommand == "build":
-            build_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            build_subcommand(title, repos, emu_config_file,
+                             config_file, destination, substitutions, test)
         if subcommand == "configure":
-            configure_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            configure_subcommand(title, repos, emu_config_file,
+                                 config_file, destination, substitutions, test)
         if subcommand == "check":
-            check_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            check_subcommand(title, repos, emu_config_file,
+                             config_file, destination, substitutions, test)
         if subcommand == "test":
-            test_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            test_subcommand(title, repos, emu_config_file,
+                            config_file, destination, substitutions, test)
         if subcommand == "link":
-            link_subcommand(title, repos, emu_config_file, config_file, destination, substitutions, test)
+            link_subcommand(title, repos, emu_config_file,
+                            config_file, destination, substitutions, test)
