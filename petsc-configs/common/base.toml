@@ -2,6 +2,7 @@
 c2html="--with-c2html=0"
 hipc="--with-hipc=0"
 x="--with-x=0"
+debugging="--with-debugging=1"
 
 [PACKAGES]
 slepc="--download-slepc"
