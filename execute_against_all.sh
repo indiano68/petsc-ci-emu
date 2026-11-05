@@ -28,5 +28,6 @@ echo $command
 for config in "${configs[@]}"; do
     arch=$(basename "$config" .toml)
     echo "RUNNING $command against $arch"
-    uv run petsc-ci-emu arch "$command" "$config" "$add"
+    uv run petsc-ci-emu arch "$command" "$config" "$add" ; poke "$config"
+    # uv run petsc-ci-emu arch "$command" "$config" "$add"
 done
